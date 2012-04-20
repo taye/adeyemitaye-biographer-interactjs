@@ -31,8 +31,10 @@
         var graphHtmlPosition = this.graph().htmlTopLeft();
         var correction = bui.settings.style.placeholderCorrection.position;
         var scale = this.graph().scale();
-        privates.placeholder.style.left = Math.round( absolutePosition.x * scale + graphHtmlPosition.x + correction.x ) + 'px';
-        privates.placeholder.style.top = Math.round( absolutePosition.y * scale + graphHtmlPosition.y + correction.y ) + 'px';
+        privates.placeholder.style.left = (absolutePosition.x * scale +
+                graphHtmlPosition.x + correction.x) + 'px';
+        privates.placeholder.style.top = (absolutePosition.y * scale +
+                graphHtmlPosition.y + correction.y) + 'px';
 
         correction = bui.settings.style.placeholderCorrection.size;
         privates.placeholder.style.width = (privates.width * scale +
@@ -270,7 +272,7 @@
      *   part of.
      */
     bui.Node = function(args) {
-        args.id = bui.settings.idPrefix.node + args.id;
+        //args.id = bui.settings.idPrefix.node + args.id;
         bui.Node.superClazz.call(this, args);
         this._addType(bui.Node.ListenerType);
 
@@ -1048,18 +1050,19 @@
             var auxUnits = this.auxiliaryUnits();
             if (auxUnits.length > 0) {
                 var auxUnitsJson = [];
-                updateJson(json, dataFormat.node.modifications, auxUnitsJson);
 
                 for (i = 0; i < auxUnits.length; i++) {
                     var auxUnit = auxUnits[i];
 
-                    if (auxUnit instanceof bui.StateVariable) {
+                    if (auxUnit instanceof bui.StateVariable || auxUnit instanceof bui.StateVariableER) {
+                    
                         auxUnitsJson.push(auxUnit.toJSON());
                     } else {
                         log('Warning: Can\'t export units of information to ' +
                                 'JSON.');
                     }
                 }
+                updateJson(json, dataFormat.node.statevariable, auxUnitsJson);
             }
 
             return json;

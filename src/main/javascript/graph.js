@@ -43,13 +43,13 @@
     var __initialPaintGraph = function() {
         var privates = this._privates(identifier);
 
-//        var div = document.createElement('div');
-//        privates.container.appendChild(div);
+        var div = document.createElement('div');
+        privates.container.appendChild(div);
 
         privates.root = document.createElementNS(bui.svgns, 'svg');
         privates.root.setAttribute('xmlns', bui.svgns);
         privates.root.setAttribute('id', privates.id);
-        privates.container.appendChild(privates.root);
+        div.appendChild(privates.root);
 
         var offset = jQuery(privates.root).offset();
         privates.rootOffset = {
@@ -80,9 +80,9 @@
         privates.edgeGroup = document.createElementNS(bui.svgns, 'g');
         privates.rootGroup.appendChild(privates.edgeGroup);
 
-        privates.placeholderContainer = privates.container;  //document.createElement('div');
-//        document.getElementsByTagName('body')[0]
-//                .appendChild(privates.placeholderContainer);
+        privates.placeholderContainer = document.createElement('div');
+        document.getElementsByTagName('body')[0]
+                .appendChild(privates.placeholderContainer);
 
         privates.connectingArcs = {};
 
@@ -389,16 +389,19 @@
          *   constructor.
          * @return {bui.Drawable} The constructed drawable object.
          */
-        add : function(constructor, params) {
+        add : function(constructor, id, params) {
             var privates = this._privates(identifier);
             var drawable = null;
-            var id = privates.idCounter++;
+            var counter_id = privates.idCounter++;
 
             if (params === undefined) {
                 params = {};
             }
 
-            params.id = id;
+            if (id == undefined)
+                params.id = 'drawable'+counter_id
+            else
+                params.id = id;
             params.graph = this;
 
             drawable = new constructor(params);
